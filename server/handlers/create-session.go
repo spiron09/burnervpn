@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/digitalocean/godo"
@@ -43,7 +42,7 @@ func HandleCreateSession(w http.ResponseWriter, r *http.Request) {
 		ID:            uuid.New().String(),
 		Region:        req.Region,
 		Status:        "Creating",
-		CreatedAt:     time.Now().Format(time.RFC3339),
+		CreatedAt:     time.Now().UTC(),
 		ServerKeyPair: serverKeys,
 		ClientKeyPair: clientKeys,
 	}
@@ -72,7 +71,7 @@ func HandleCreateSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session.DropletID = strconv.Itoa(provisionedDroplet.ID)
+	session.DropletID = provisionedDroplet.ID
 	session.DropletIP = provisionedDroplet.Networks.V4[0].IPAddress
 	session.Status = "Active"
 	sessionStore.SetSession(session)

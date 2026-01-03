@@ -1,15 +1,19 @@
 package main
 
 import (
-	"github.com/spiron09/burnervpn/server/handlers"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/spiron09/burnervpn/server/handlers"
 )
 
 func main() {
-	http.HandleFunc("/sessions", handlers.HandleCreateSession)
-	http.HandleFunc("/regions", handlers.HandleRegions)
+	r := mux.NewRouter()
+	r.HandleFunc("/sessions/{id}", handlers.HandleDeleteSession).Methods("DELETE")
+	r.HandleFunc("/sessions", handlers.HandleCreateSession).Methods("POST")
+	r.HandleFunc("/regions", handlers.HandleRegions).Methods("GET")
 
 	log.Println("Server starting on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
