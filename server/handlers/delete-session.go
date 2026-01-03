@@ -11,9 +11,9 @@ import (
 )
 
 type DeleteSessionResponse struct {
-	SessionID string        `json:"session_id"`
-	Duration  time.Duration `json:"duration"`
-	Cost      float64       `json:"cost"`
+	SessionID string  `json:"session_id"`
+	Duration  float64 `json:"duration"`
+	Cost      float64 `json:"cost"`
 }
 
 func HandleDeleteSession(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +44,7 @@ func HandleDeleteSession(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(DeleteSessionResponse{
 		SessionID: sessionID,
-		Duration:  time.Duration(duration.Seconds()),
+		Duration:  duration.Seconds(),
 		Cost:      cost,
 	})
 }
