@@ -5,8 +5,10 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spiron09/burnervpn/internal/client"
 )
 
 // listCmd represents the list command
@@ -15,7 +17,17 @@ var listCmd = &cobra.Command{
 	Short: "Lists the available server locations",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+		c := client.NewClient()
+		regions, err := c.ListRegions()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+
+		fmt.Println("Available regions:")
+		for _, region := range regions.Regions {
+			fmt.Printf("- %s (%s)\n", region.Name, region.Slug)
+		}
 	},
 }
 
