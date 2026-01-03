@@ -1,6 +1,5 @@
 /*
 Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -14,7 +13,7 @@ import (
 var connectCmd = &cobra.Command{
 	Use:   "connect",
 	Short: "Connect to the server name provided in the argument",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("connect called")
 	},
