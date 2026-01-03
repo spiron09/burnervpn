@@ -5,15 +5,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/spiron09/burnervpn/server/config"
-
 	"github.com/digitalocean/godo"
+	"github.com/spiron09/burnervpn/server/config"
+	"github.com/spiron09/burnervpn/server/models"
 )
-
-type Region struct {
-	Slug string `json:"slug"`
-	Name string `json:"name"`
-}
 
 func HandleRegions(w http.ResponseWriter, r *http.Request) {
 	client := config.LoadDOClient()
@@ -23,10 +18,10 @@ func HandleRegions(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	availableRegions := []Region{}
+	availableRegions := []models.Region{}
 	for _, region := range regions {
 		if region.Available {
-			availableRegions = append(availableRegions, Region{
+			availableRegions = append(availableRegions, models.Region{
 				Slug: region.Slug,
 				Name: region.Name,
 			})
