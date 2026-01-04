@@ -21,27 +21,22 @@ type SessionMetadata struct {
 	CreatedAt string `json:"created_at"`
 }
 
-func loadMetadata() ([]SessionMetadata, error) {
+func loadMetadata() (map[string]SessionMetadata, error) {
 	path := filepath.Join(os.Getenv("HOME"), ".burnervpn", "metadata.json")
 	data, err := os.ReadFile(path)
 	if os.IsNotExist(err) {
-		return make([]SessionMetadata, 0), nil
+		return make(map[string]SessionMetadata), nil
 	}
 	if err != nil {
 		return nil, err
 	}
-	var sessions []SessionMetadata
+	var sessions map[string]SessionMetadata
 	err = json.Unmarshal(data, &sessions)
 	return sessions, err
 }
 
-func saveMetadata(session SessionMetadata) error {
+func updateMetadata(sessions map[string]SessionMetadata) error {
 	path := filepath.Join(os.Getenv("HOME"), ".burnervpn", "metadata.json")
-	sessions, err := loadMetadata()
-	if err != nil {
-		return err
-	}
-	sessions = append(sessions, session)
 	data, err := json.MarshalIndent(sessions, "", "  ")
 	if err != nil {
 		return err
@@ -58,12 +53,19 @@ func saveConfig(SessionID, region, config string) (string, error) {
 	}
 
 	filename := fmt.Sprintf("%s_%s.conf", SessionID[:8], region)
-	err = saveMetadata(SessionMetadata{
+	sessions, err := loadMetadata()
+	if err != nil {
+		return "", err
+	}
+
+	sessions[SessionID] = SessionMetadata{
 		SessionID: SessionID,
 		FileName:  filename,
 		Region:    region,
 		CreatedAt: time.Now().Format(time.RFC3339),
-	})
+	}
+	err = updateMetadata(sessions)
+
 	if err != nil {
 		return "", err
 	}
