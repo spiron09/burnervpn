@@ -55,8 +55,8 @@ var disconnectCmd = &cobra.Command{
 		}
 		fmt.Printf("Session %s deleted successfully\n", sessionID)
 		fmt.Printf("\n-----USAGE-----\n")
-		fmt.Printf("Time: %v\n", resp.DurationInSeconds)
-		fmt.Printf("Cost: %v\n", resp.Cost)
+		fmt.Printf("Time: %.2f\n", resp.DurationInSeconds)
+		fmt.Printf("Cost: %.2f\n", resp.Cost)
 	},
 }
 

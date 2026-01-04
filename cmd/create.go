@@ -96,7 +96,7 @@ var connectCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		fmt.Printf("Created a VPN server in %s\n", region)
+		fmt.Printf("Created a VPN server in %s with session ID %s\n", region, resp.SessionID)
 		fmt.Printf("Config file saved to %s\n", configFilePath)
 		fmt.Printf("Metadata saved to %s\n", filepath.Join(os.Getenv("HOME"), ".burnervpn", "metadata.json"))
 		//TODO: print QR Code
