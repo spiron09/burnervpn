@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/skip2/go-qrcode"
 	"github.com/spf13/cobra"
 	"github.com/spiron09/burnervpn/internal/client"
 )
@@ -73,6 +74,16 @@ func saveConfig(SessionID, region, config string) (string, error) {
 	return configFilePath, os.WriteFile(configFilePath, []byte(config), 0600)
 }
 
+func printQRCode(config string) error {
+	uri := config
+	qr, err := qrcode.New(uri, qrcode.Low)
+	if err != nil {
+		return err
+	}
+	fmt.Println(qr.ToSmallString(false))
+	return nil
+}
+
 // connectCmd represents the connect command
 var connectCmd = &cobra.Command{
 	Use:   "create <region>",
@@ -100,6 +111,12 @@ var connectCmd = &cobra.Command{
 		fmt.Printf("Config file saved to %s\n", configFilePath)
 		fmt.Printf("Metadata saved to %s\n", filepath.Join(os.Getenv("HOME"), ".burnervpn", "metadata.json"))
 		//TODO: print QR Code
+		fmt.Println("QR Code:")
+		err = printQRCode(resp.WireGuardConfig)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
 	},
 }
 
