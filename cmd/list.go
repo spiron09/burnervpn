@@ -15,6 +15,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Lists the available server locations",
+	Args:  cobra.NoArgs,
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		c := client.NewClient()
