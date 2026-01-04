@@ -42,7 +42,7 @@ func saveMetadata(session SessionMetadata) error {
 		return err
 	}
 	sessions = append(sessions, session)
-	data, err := json.MarshalIndent(sessions, "", " ")
+	data, err := json.MarshalIndent(sessions, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func saveConfig(SessionID, region, config string) (string, error) {
 		CreatedAt: time.Now().Format(time.RFC3339),
 	})
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 	configFilePath := filepath.Join(dir, filename)
 	return configFilePath, os.WriteFile(configFilePath, []byte(config), 0600)
