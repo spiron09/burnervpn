@@ -4,37 +4,34 @@ Copyright © 2026 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/spf13/cobra"
-	"github.com/spiron09/burnervpn/internal/client"
 )
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "Lists the available server locations",
+	Short: "List resources (regions, sessions)",
 	Args:  cobra.NoArgs,
 	Long:  ``,
-	Run: func(cmd *cobra.Command, args []string) {
-		c := client.NewClient()
-		regions, err := c.ListRegions()
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
+	// Run: func(cmd *cobra.Command, args []string) {
+	// 	c := client.NewClient()
+	// 	regions, err := c.ListRegions()
+	// 	if err != nil {
+	// 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+	// 		os.Exit(1)
+	// 	}
 
-		fmt.Println("Available regions:")
-		for _, region := range regions.Regions {
-			fmt.Printf("- %s (%s)\n", region.Name, region.Slug)
-		}
-	},
+	// 	fmt.Println("Available regions:")
+	// 	for _, region := range regions.Regions {
+	// 		fmt.Printf("- %s (%s)\n", region.Name, region.Slug)
+	// 	}
+	// },
 }
 
 func init() {
 	rootCmd.AddCommand(listCmd)
-
+	listCmd.AddCommand(listSessionsCmd)
+	listCmd.AddCommand(listRegionsCmd)
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
