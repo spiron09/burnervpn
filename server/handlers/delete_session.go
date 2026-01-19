@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -34,8 +35,13 @@ func HandleDeleteSession(w http.ResponseWriter, r *http.Request) {
 	duration := time.Since(session.CreatedAt)
 
 	client := config.LoadDOClient()
-	client.Droplets.Delete(context.Background(), session.DropletID)
-
+	fmt.Println("hi!!")
+	_, err := client.Droplets.Delete(context.Background(), session.DropletID)
+	if err != nil {
+		http.Error(w, "Failed to delete droplet", http.StatusInternalServerError)
+		return
+	}
+	fmt.Println("hi!!")
 	hours := duration.Hours()
 	cost := hours * 0.015
 
